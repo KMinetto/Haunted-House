@@ -173,13 +173,18 @@ scene.add(floor);
  * Lights
  */
 // Ambient light
-const ambientLight = new THREE.AmbientLight('#ffffff', 0.5);
+const ambientLight = new THREE.AmbientLight('#B9D5FF', 0.12);
 scene.add(ambientLight);
 
 // Directional light
-const moonLight = new THREE.DirectionalLight('#ffffff', 1.5);
-moonLight.position.set(4, 5, - 2);
+const moonLight = new THREE.DirectionalLight('#B9D5FF', 0.26);
+moonLight.position.set(4, 5, -2);
 scene.add(moonLight);
+
+//
+const doorLight = new THREE.PointLight("#FF7D46", 3, 7);
+doorLight.position.set(0, 2.2, 2.7);
+house.add(doorLight);
 
 /**
  * Debug
@@ -219,6 +224,32 @@ directionalLightFolder.add(moonLight.position, 'z')
     .max(5)
     .step(0.001)
     .name("Directional Light Z")
+;
+
+const pointLightFolder = lightsGuiFolder.addFolder("Point Light");
+pointLightFolder.add(doorLight, 'intensity')
+    .min(-3)
+    .max(3)
+    .step(0.001)
+    .name("Point Light Intensity")
+;
+pointLightFolder.add(doorLight.position, 'x')
+    .min(-5)
+    .max(5)
+    .step(0.001)
+    .name("Point Light X")
+;
+pointLightFolder.add(doorLight.position, 'y')
+    .min(-5)
+    .max(5)
+    .step(0.001)
+    .name("Point Light Y")
+;
+pointLightFolder.add(doorLight.position, 'z')
+    .min(-5)
+    .max(5)
+    .step(0.001)
+    .name("Point Light Z")
 ;
 
 window.addEventListener('resize', () =>
