@@ -57,6 +57,16 @@ loadingManager.onError = function ( url ) {
 const textureLoader = new THREE.TextureLoader();
 
 /**
+ * Fog
+ */
+const fog = new THREE.Fog(
+    "#262837",
+    1, // Near
+    15 // Far
+);
+scene.fog = fog;
+
+/**
  * House
  */
 // Group
@@ -279,6 +289,7 @@ const renderer = new THREE.WebGLRenderer({
 });
 renderer.setSize(sizes.width, sizes.height);
 renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+renderer.setClearColor("#262837");
 
 /**
  * Animate
