@@ -232,6 +232,7 @@ floor.rotation.x = - Math.PI * 0.5;
 floor.position.y = 0;
 scene.add(floor);
 
+
 /**
  * Lights
  */
@@ -315,6 +316,18 @@ pointLightFolder.add(doorLight.position, 'z')
     .name("Point Light Z")
 ;
 
+/**
+ * Ghosts
+ */
+const ghost1 = new THREE.PointLight("#FF00FF", 6, 3);
+scene.add(ghost1);
+
+const ghost2 = new THREE.PointLight("#00FFFF", 6, 3);
+scene.add(ghost2);
+
+const ghost3 = new THREE.PointLight("#FFFF00", 6, 3);
+scene.add(ghost3);
+
 window.addEventListener('resize', () =>
 {
     // Update sizes
@@ -355,6 +368,27 @@ const tick = () =>
 
     // Update controls
     controls.update();
+
+    /**
+     * Update Ghosts
+     */
+    // Ghost 1
+    const ghosts1Angle = elapsedTime * 0.5;
+    ghost1.position.x = Math.cos(ghosts1Angle) * 4;
+    ghost1.position.z = Math.sin(ghosts1Angle) * 4;
+    ghost1.position.y = Math.sin(elapsedTime * 3);
+
+    // Ghost 2
+    const ghosts2Angle = -elapsedTime * 0.32;
+    ghost2.position.x = Math.cos(ghosts2Angle * 2) * 5;
+    ghost2.position.z = Math.sin(ghosts2Angle * 2) * 5;
+    ghost2.position.y = Math.cos(elapsedTime * 4) + Math.sin(elapsedTime * 2.5);
+
+    // Ghost 3
+    const ghosts3Angle = -elapsedTime * 0.18;
+    ghost3.position.x = Math.sin(ghosts3Angle) * (7 * Math.sin(elapsedTime * 0.32));
+    ghost3.position.z = Math.cos(ghosts3Angle) * (7 * Math.sin(elapsedTime * 0.5));
+    ghost3.position.y = Math.sin(elapsedTime * 4) + Math.sin(elapsedTime * 2.5);
 
     // Render
     renderer.render(scene, camera);
