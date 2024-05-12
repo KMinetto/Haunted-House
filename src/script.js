@@ -2,11 +2,14 @@ import * as THREE from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 import GUI from 'lil-gui';
 
+console.time();
+
 /**
  * Base
  */
 // Debug
 const gui = new GUI();
+gui.hide();
 
 // Canvas
 const canvas = document.querySelector('canvas.webgl');
@@ -173,6 +176,7 @@ const bush2 = new THREE.Mesh(
 bush2.scale.set(0.25, 0.25, 0.25);
 bush2.position.set(1.4, 0.1, 2.1);
 
+
 const bush3 = new THREE.Mesh(
     bushGeometry,
     bushMaterial
@@ -186,6 +190,7 @@ const bush4 = new THREE.Mesh(
 );
 bush4.scale.set(0.15, 0.15, 0.15);
 bush4.position.set(-1, 0.05, 2.6);
+
 
 house.add(bush1, bush2, bush3, bush4);
 
@@ -215,6 +220,9 @@ for (let i = 0; i < 50; i++) {
     grave.rotation.z = (Math.random() - 0.5) * 0.4;
     grave.rotation.y = (Math.random() - 0.5) * 0.4;
 
+    grave.castShadow = true;
+    grave.receiveShadow = true;
+
     graves.add(grave);
 }
 
@@ -231,7 +239,6 @@ const floor = new THREE.Mesh(
 floor.rotation.x = - Math.PI * 0.5;
 floor.position.y = 0;
 scene.add(floor);
-
 
 /**
  * Lights
@@ -346,6 +353,7 @@ window.addEventListener('resize', () =>
 // Controls
 const controls = new OrbitControls(camera, canvas);
 controls.enableDamping = true;
+controls.enabled = false;
 
 /**
  * Renderer
@@ -356,6 +364,43 @@ const renderer = new THREE.WebGLRenderer({
 renderer.setSize(sizes.width, sizes.height);
 renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
 renderer.setClearColor("#262837");
+/**
+ * Shadows
+ */
+renderer.shadowMap.enabled = true;
+renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+
+// House Shadow
+walls.castShadow = true;
+// Bushes Shadow
+bush1.castShadow = true;
+bush2.castShadow = true;
+bush3.castShadow = true;
+bush4.castShadow = true;
+// Floor Shadow
+floor.receiveShadow = true;
+// Lights Shadow
+moonLight.castShadow = true;
+moonLight.shadow.mapSize.width = 256;
+moonLight.shadow.mapSize.height = 256;
+moonLight.shadow.camera.far = 15;
+doorLight.castShadow = true;
+doorLight.shadow.mapSize.width = 256;
+doorLight.shadow.mapSize.height = 256;
+doorLight.shadow.camera.far = 7;
+// Ghosts
+ghost1.castShadow = true;
+ghost1.shadow.mapSize.width = 256;
+ghost1.shadow.mapSize.height = 256;
+ghost1.shadow.camera.far = 7;
+ghost2.castShadow = true;
+ghost2.shadow.mapSize.width = 256;
+ghost2.shadow.mapSize.height = 256;
+ghost2.shadow.camera.far = 7;
+ghost3.castShadow = true;
+ghost3.shadow.mapSize.width = 256;
+ghost3.shadow.mapSize.height = 256;
+ghost3.shadow.camera.far = 7;
 
 /**
  * Animate
@@ -390,6 +435,11 @@ const tick = () =>
     ghost3.position.z = Math.cos(ghosts3Angle) * (7 * Math.sin(elapsedTime * 0.5));
     ghost3.position.y = Math.sin(elapsedTime * 4) + Math.sin(elapsedTime * 2.5);
 
+    // Update Camera
+    const cameraAngle = elapsedTime * 0.2;
+    camera.position.x = Math.cos(cameraAngle) * 8;
+    camera.position.z = Math.sin(cameraAngle) * 8;
+
     // Render
     renderer.render(scene, camera);
 
@@ -398,3 +448,4 @@ const tick = () =>
 };
 
 tick();
+console.timeEnd();
