@@ -54,7 +54,44 @@ loadingManager.onError = function ( url ) {
 };
 
 // Textures Loader
-const textureLoader = new THREE.TextureLoader();
+const textureLoader = new THREE.TextureLoader(loadingManager);
+// Door
+const doorAlpha = textureLoader.load("textures/door/alpha.jpg");
+const doorAmbientOcclusion = textureLoader.load("textures/door/ambientOcclusion.jpg");
+const doorColor = textureLoader.load("textures/door/color.jpg");
+const doorHeight = textureLoader.load("textures/door/height.jpg");
+const doorMetalness = textureLoader.load("textures/door/metalness.jpg");
+const doorNormal = textureLoader.load("textures/door/normal.jpg");
+const doorRoughness = textureLoader.load("textures/door/roughness.jpg");
+
+// Walls
+const wallsAmbientOcclution = textureLoader.load("textures/bricks/ambientOcclusion.jpg");
+const wallsColor = textureLoader.load("textures/bricks/color.jpg");
+const wallsNormal = textureLoader.load("textures/bricks/normal.jpg");
+const wallsRoughness = textureLoader.load("textures/bricks/roughness.jpg");
+
+// Grass
+const grassAmbientOcclusion = textureLoader.load("textures/grass/ambientOcclusion.jpg");
+const grassColor = textureLoader.load("textures/grass/color.jpg");
+const grassNormal = textureLoader.load("textures/grass/normal.jpg");
+const grassRoughness = textureLoader.load("textures/grass/roughness.jpg");
+grassAmbientOcclusion.repeat.set(8, 8);
+grassColor.repeat.set(8, 8);
+grassNormal.repeat.set(8, 8);
+grassRoughness.repeat.set(8, 8);
+grassAmbientOcclusion.wrapS = THREE.RepeatWrapping;
+grassColor.wrapS = THREE.RepeatWrapping;
+grassNormal.wrapS = THREE.RepeatWrapping;
+grassRoughness.wrapS = THREE.RepeatWrapping;
+grassAmbientOcclusion.wrapT = THREE.RepeatWrapping;
+grassColor.wrapT = THREE.RepeatWrapping;
+grassNormal.wrapT = THREE.RepeatWrapping;
+grassRoughness.wrapT = THREE.RepeatWrapping;
+
+// ColorSpace
+doorColor.colorSpace = THREE.SRGBColorSpace;
+wallsColor.colorSpace = THREE.SRGBColorSpace;
+grassColor.colorSpace = THREE.SRGBColorSpace;
 
 /**
  * Fog
@@ -77,7 +114,10 @@ scene.add(house);
 const walls = new THREE.Mesh(
     new THREE.BoxGeometry(4, 2.5, 4),
     new THREE.MeshStandardMaterial({
-        color: "#AC8E82"
+        aoMap: wallsAmbientOcclution,
+        map: wallsColor,
+        normalMap: wallsNormal,
+        roughnessMap: wallsRoughness
     })
 );
 walls.position.y = 2.5 / 2;
@@ -96,9 +136,17 @@ house.add(roof);
 
 // Door
 const door = new THREE.Mesh(
-    new THREE.PlaneGeometry(2, 2),
+    new THREE.PlaneGeometry(2.2, 2.2, 100, 100),
     new THREE.MeshStandardMaterial({
-        color: "#AA7B7B"
+        alphaMap: doorAlpha,
+        aoMap: doorAmbientOcclusion,
+        map: doorColor,
+        displacementMap: doorHeight,
+        displacementScale: 0.1,
+        normalMap: doorNormal,
+        metalnessMap: doorMetalness,
+        roughnessMap: doorRoughness,
+        transparent: true,
     })
 );
 door.position.y = 1
@@ -173,7 +221,12 @@ for (let i = 0; i < 50; i++) {
 // Floor
 const floor = new THREE.Mesh(
     new THREE.PlaneGeometry(20, 20),
-    new THREE.MeshStandardMaterial({ color: '#a9c388' })
+    new THREE.MeshStandardMaterial({
+        aoMap: grassAmbientOcclusion,
+        map: grassColor,
+        normalMap: grassNormal,
+        roughnessMap: grassRoughness
+    })
 );
 floor.rotation.x = - Math.PI * 0.5;
 floor.position.y = 0;
@@ -192,7 +245,7 @@ moonLight.position.set(4, 5, -2);
 scene.add(moonLight);
 
 //
-const doorLight = new THREE.PointLight("#FF7D46", 3, 7);
+const doorLight = new THREE.PointLight("#FF7D46", 1.4, 7);
 doorLight.position.set(0, 2.2, 2.7);
 house.add(doorLight);
 
@@ -238,8 +291,8 @@ directionalLightFolder.add(moonLight.position, 'z')
 
 const pointLightFolder = lightsGuiFolder.addFolder("Point Light");
 pointLightFolder.add(doorLight, 'intensity')
-    .min(-3)
-    .max(3)
+    .min(-2)
+    .max(2)
     .step(0.001)
     .name("Point Light Intensity")
 ;
