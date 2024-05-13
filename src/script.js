@@ -353,7 +353,7 @@ window.addEventListener('resize', () =>
 // Controls
 const controls = new OrbitControls(camera, canvas);
 controls.enableDamping = true;
-controls.enabled = false;
+// controls.enabled = false;
 
 /**
  * Renderer
@@ -373,10 +373,10 @@ renderer.shadowMap.type = THREE.PCFSoftShadowMap;
 // House Shadow
 walls.castShadow = true;
 // Bushes Shadow
-bush1.castShadow = true;
-bush2.castShadow = true;
-bush3.castShadow = true;
-bush4.castShadow = true;
+// bush1.castShadow = true;
+// bush2.castShadow = true;
+// bush3.castShadow = true;
+// bush4.castShadow = true;
 // Floor Shadow
 floor.receiveShadow = true;
 // Lights Shadow
@@ -436,9 +436,9 @@ const tick = () =>
     ghost3.position.y = Math.sin(elapsedTime * 4) + Math.sin(elapsedTime * 2.5);
 
     // Update Camera
-    const cameraAngle = elapsedTime * 0.2;
-    camera.position.x = Math.cos(cameraAngle) * 8;
-    camera.position.z = Math.sin(cameraAngle) * 8;
+    // const cameraAngle = elapsedTime * 0.2;
+    // camera.position.x = Math.cos(cameraAngle) * 8;
+    // camera.position.z = Math.sin(cameraAngle) * 8;
 
     // Render
     renderer.render(scene, camera);
