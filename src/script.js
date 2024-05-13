@@ -2,6 +2,19 @@ import * as THREE from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 import GUI from 'lil-gui';
 
+/**
+ * Open Graph
+ */
+const image = new Image(
+    1200,
+    630
+);
+image.src = "./opengraph/github-social-media.jpg";
+const imageOG = document.querySelectorAll('[data-og-image]');
+imageOG.forEach((og) => {
+    og.setAttribute('content', image.src);
+});
+
 console.time();
 
 /**
